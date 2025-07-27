@@ -5,6 +5,8 @@ import models.Cell;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class MazePanel extends JPanel {
     private final int rows;
@@ -19,5 +21,31 @@ public class MazePanel extends JPanel {
         this.cells = new Cell[rows][cols];
         this.buttons = new JButton[parametro1][parametro2];
         setLayout(new GridLayout(parametro1, parametro2));
+        cargarMatriz();
     }
+
+    public void cargarMatriz() {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                Cell cell = new Cell(i, j);
+                JButton jButton = new JButton();
+                jButton.setBackground(Color.WHITE);
+                jButton.setOpaque(true);
+                jButton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+                int i2 = i, j2 = j;
+                jButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if (MazePanel.this.mazeController != null) {
+                            MazePanel.this.mazeController.celdaClickeada(i2, j2);
+                        }
+                    }
+                });
+                add(jButton);
+                this.cells[i2][j2] = cell;
+                this.buttons[i2][j2] = jButton;
+            }
+        }
+    }
+
 }
