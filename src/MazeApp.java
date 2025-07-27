@@ -2,9 +2,7 @@ import models.Cell;
 import models.CellState;
 import models.SolveResults;
 import solver.MazeSolver;
-import solver.solverImpl.MazeSolverRecursivo;
-import solver.solverImpl.MazeSolverRecursivoCompleto;
-import solver.solverImpl.MazeSolverRecursivoCompletoBT;
+import solver.solverImpl.*;
 
 import java.util.*;
 
@@ -34,7 +32,9 @@ public class MazeApp {
         end.setState(CellState.END);
 
         // Escoge el algoritmo a probar
-        MazeSolver solver = new MazeSolverRecursivo();
+        MazeSolver solver = new MazeSolverBFS();
+        // MazeSolver solver = new MazeSolverDFS();
+        // MazeSolver solver = new MazeSolverRecursivo();
         // MazeSolver solver = new MazeSolverRecursivoCompleto();
         // MazeSolver solver = new MazeSolverRecursivoCompletoBT();
 
