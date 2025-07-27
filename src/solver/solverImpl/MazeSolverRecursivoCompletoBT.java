@@ -12,39 +12,43 @@ import models.SolveResults;
 import solver.MazeSolver;
 
 public class MazeSolverRecursivoCompletoBT implements MazeSolver {
-    private Set<Cell> visited = new LinkedHashSet<>();
+    private final Set<Cell> visitadas = new LinkedHashSet<>();
+    private final List<Cell> camino = new ArrayList<>();
 
-    private List<Cell> camino = new ArrayList<>();
-
-    public SolveResults getPath(Cell[][] paramArrayOfCell, Cell paramCell1, Cell paramCell2) {
-        this.visited.clear();
-        this.camino.clear();
-        findPath(paramArrayOfCell, paramCell1.row, paramCell1.col, paramCell2);
-        Collections.reverse(this.camino);
-        return new SolveResults(new ArrayList<>(this.visited), new ArrayList<>(this.camino));
+    @Override
+    public SolveResults getPath(Cell[][] maze, Cell start, Cell end) {
+        visitadas.clear();
+        camino.clear();
+        findPath(maze, start.getRow(), start.getCol(), end);
+        Collections.reverse(camino);
+        return new SolveResults(new ArrayList<>(visitadas), new ArrayList<>(camino));
     }
 
-    private boolean findPath(Cell[][] paramArrayOfCell, int paramInt1, int paramInt2, Cell paramCell) {
-        if (!isValid(paramArrayOfCell, paramInt1, paramInt2))
-            return false;
-        Cell cell = paramArrayOfCell[paramInt1][paramInt2];
-        if (this.visited.contains(cell))
-            return false;
-        this.visited.add(cell);
-        this.camino.add(cell);
-        if (cell.equals(paramCell)) {
-            this.camino.add(cell);
+    private boolean findPath(Cell[][] maze, int row, int col, Cell end) {
+        if (!isValid(maze, row, col)) return false;
+        Cell cell = maze[row][col];
+        if (visitadas.contains(cell)) return false;
+
+        visitadas.add(cell);
+        camino.add(cell);
+
+        if (cell.equals(end)) {
+            camino.add(cell);
             return true;
         }
-        if (findPath(paramArrayOfCell, paramInt1 + 1, paramInt2, paramCell) ||
-                findPath(paramArrayOfCell, paramInt1, paramInt2 + 1, paramCell) ||
-                findPath(paramArrayOfCell, paramInt1 - 1, paramInt2, paramCell) ||
-                findPath(paramArrayOfCell, paramInt1, paramInt2 - 1, paramCell))
-            return true;
+
+        if (findPath(maze, row + 1, col, end) ||
+                findPath(maze, row, col + 1, end) ||
+                findPath(maze, row - 1, col, end) ||
+                findPath(maze, row, col - 1, end)) return true;
+
+        camino.remove(camino.size() - 1); // backtracking
         return false;
     }
 
-    private boolean isValid(Cell[][] paramArrayOfCell, int paramInt1, int paramInt2) {
-        return (paramInt1 >= 0 && paramInt1 < paramArrayOfCell.length && paramInt2 >= 0 && paramInt2 < (paramArrayOfCell[0]).length && (paramArrayOfCell[paramInt1][paramInt2]).state != CellState.WALL);
+    private boolean isValid(Cell[][] maze, int row, int col) {
+        return row >= 0 && row < maze.length &&
+                col >= 0 && col < maze[0].length &&
+                maze[row][col].getState() != CellState.WALL;
     }
 }

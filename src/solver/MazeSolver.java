@@ -3,5 +3,5 @@ import models.Cell;
 import models.SolveResults;
 
 public interface MazeSolver {
-    SolveResults getPath(Cell[][] paramArrayOfCell, Cell paramCell1, Cell paramCell2);
+    SolveResults getPath(Cell[][] maze, Cell start, Cell end);
 }
