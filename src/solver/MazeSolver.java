@@ -1,5 +1,7 @@
 package solver;
+import models.Cell;
+import models.SolveResults;
 
-public class MazeSolver {
-    
+public interface MazeSolver {
+    SolveResults getPath(Cell[][] paramArrayOfCell, Cell paramCell1, Cell paramCell2);
 }
