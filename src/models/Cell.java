@@ -1,5 +1,7 @@
 package models;
 
+import java.util.Objects;
+
 public class Cell {
     private final int row;
     private final int col;
@@ -36,7 +38,7 @@ public class Cell {
 
     @Override
     public int hashCode() {
-        return 31 * row + col;
+        return Objects.hash(row, col);
     }
 
     @Override
