@@ -6,42 +6,43 @@ import solver.solverImpl.*;
 
 import java.util.*;
 
+import javax.swing.JOptionPane;
+
 public class MazeApp {
     public static void main(String[] args) {
-        int filas = 5;
-        int columnas = 5;
-
-        // Crear laberinto vacío
+        int[] dimensiones = solicitarDimensiones();
+        if (dimensiones == null) {
+            System.out.println("Cancelado por el usuario o entrada inválida.");
+            return;
+        }
+        int filas = dimensiones[0];
+        int columnas = dimensiones[1];
         Cell[][] laberinto = new Cell[filas][columnas];
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
-                laberinto[i][j] = new Cell(i, j); // Por defecto es EMPTY
+                laberinto[i][j] = new Cell(i, j);
             }
         }
 
-        // Añadir algunas paredes
+        // Paredes
         laberinto[1][1].setState(CellState.WALL);
         laberinto[2][1].setState(CellState.WALL);
         laberinto[3][1].setState(CellState.WALL);
         laberinto[3][3].setState(CellState.WALL);
 
-        // Definir punto de inicio y fin
         Cell start = laberinto[0][0];
-        Cell end = laberinto[4][4];
+        Cell end = laberinto[filas - 1][columnas - 1];
         start.setState(CellState.START);
         end.setState(CellState.END);
 
-        // Escoge el algoritmo a probar
         MazeSolver solver = new MazeSolverBFS();
         // MazeSolver solver = new MazeSolverDFS();
         // MazeSolver solver = new MazeSolverRecursivo();
         // MazeSolver solver = new MazeSolverRecursivoCompleto();
         // MazeSolver solver = new MazeSolverRecursivoCompletoBT();
 
-        // Ejecutar el algoritmo
         SolveResults resultado = solver.getPath(laberinto, start, end);
 
-        // Mostrar estadísticas
         System.out.println("Celdas visitadas: " + resultado.getVisitadas().size());
         for (Cell c : resultado.getVisitadas()) {
             System.out.println("Visitada -> " + c);
@@ -53,14 +54,12 @@ public class MazeApp {
         } else {
             for (Cell c : resultado.getCamino()) {
                 System.out.println("Camino -> " + c);
-                // Actualiza el estado para visualizarlo en el laberinto
                 if (c.getState() == CellState.EMPTY) {
                     c.setState(CellState.PATH);
                 }
             }
         }
 
-        // Mostrar el laberinto final en consola
         System.out.println("\nLaberinto resuelto:");
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
@@ -76,5 +75,30 @@ public class MazeApp {
             System.out.println();
         }
     }
+
+    // Dimensiones
+    public static int[] solicitarDimensiones() {
+        try {
+            String str1 = JOptionPane.showInputDialog("Ingrese número de filas:");
+            if (str1 == null) return null;
+
+            String str2 = JOptionPane.showInputDialog("Ingrese número de columnas:");
+            if (str2 == null) return null;
+
+            int filas = Integer.parseInt(str1.trim());
+            int columnas = Integer.parseInt(str2.trim());
+
+            if (filas <= 4 || columnas <= 4) {
+                JOptionPane.showMessageDialog(null, "Debe ingresar valores mayores a 4.");
+                return null;
+            }
+
+            return new int[] { filas, columnas };
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar números válidos.");
+            return null;
+        }
+    }
 }
+
 
