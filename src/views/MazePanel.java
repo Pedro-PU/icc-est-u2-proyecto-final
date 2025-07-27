@@ -2,6 +2,7 @@ package views;
 
 import controllers.MazeController;
 import models.Cell;
+import models.CellState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,6 +23,10 @@ public class MazePanel extends JPanel {
         this.buttons = new JButton[parametro1][parametro2];
         setLayout(new GridLayout(parametro1, parametro2));
         cargarMatriz();
+    }
+
+    public void setController(MazeController controllerMaze) {
+        this.mazeController = controllerMaze;
     }
 
     public void cargarMatriz() {
@@ -48,4 +53,23 @@ public class MazePanel extends JPanel {
         }
     }
 
+    public void limpiarCeldasVisitadas() {
+        for (int i = 0; i < this.rows; i++) {
+            for (int j = 0; j < this.cols; j++) {
+                Cell cell = this.cells[i][j];
+                if (cell.getState() != CellState.WALL && cell.getState() != CellState.START && cell.getState() != CellState.END) {
+                    cell.setState(CellState.EMPTY);
+                    this.buttons[i][j].setBackground(Color.WHITE);
+                }
+            }
+        }
+    }
+
+    public Cell[][] getCells() {
+        return cells;
+    }
+
+    public JButton getButton(int paramInt1, int paramInt2) {
+        return this.buttons[paramInt1][paramInt2];
+    }
 }
