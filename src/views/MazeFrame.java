@@ -313,43 +313,47 @@ public class MazeFrame extends JFrame {
     }
 
     private void animarVisitadas(List<Cell> visitadas, List<Cell> camino) {
-        new SwingWorker<Void, Cell>() {
-            @Override
-            protected Void doInBackground() throws Exception {
-                // Primero animar las celdas visitadas
-                for (Cell cell : visitadas) {
-                    if (cell.getState() == CellState.EMPTY) {
-                        cell.setState(CellState.EMPTY); // aseguramos estado
-                        publish(cell);
-                        Thread.sleep(40);
-                    }
-                }
+    Timer timerVisitadas = new Timer(40, null);
+    final int[] i = {0};
 
-                // Luego animar el camino real
-                for (Cell cell : camino) {
-                    if (cell.getState() != CellState.START && cell.getState() != CellState.END) {
-                        cell.setState(CellState.PATH); // marcamos como camino
-                        publish(cell);
-                        Thread.sleep(60);
-                    }
-                }
-
-                return null;
+    timerVisitadas.addActionListener(e -> {
+        if (i[0] < visitadas.size()) {
+            Cell cell = visitadas.get(i[0]);
+            if (cell.getState() == CellState.EMPTY) {
+                cell.setState(CellState.EMPTY);
+                paintCell(cell, cell.getState());
             }
+            i[0]++;
+        } else {
+            ((Timer) e.getSource()).stop();
+            animarCamino(camino); // empieza la animación del camino cuando termina
+        }
+    });
 
-            @Override
-            protected void process(List<Cell> chunks) {
-                for (Cell cell : chunks) {
-                    paintCell(cell, cell.getState());
-                }
-            }
+    timerVisitadas.start();
+}
 
-            @Override
-            protected void done() {
-                // Opcional: mensaje al terminar
+private void animarCamino(List<Cell> camino) {
+    Timer timerCamino = new Timer(60, null);
+    final int[] j = {0};
+
+    timerCamino.addActionListener(e -> {
+        if (j[0] < camino.size()) {
+            Cell cell = camino.get(j[0]);
+            if (cell.getState() != CellState.START && cell.getState() != CellState.END) {
+                cell.setState(CellState.PATH);
+                paintCell(cell, cell.getState());
             }
-        }.execute();
-    }
+            j[0]++;
+        } else {
+            ((Timer) e.getSource()).stop();
+            // Aquí puedes mostrar un mensaje si quieres
+        }
+    });
+
+    timerCamino.start();
+}
+
 
 
 
