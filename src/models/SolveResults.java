@@ -1,13 +1,11 @@
 package models;
 
 import java.util.List;
-import java.util.Set;
-
-import java.util.List;
 
 public class SolveResults {
     private final List<Cell> visitadas;
     private final List<Cell> camino;
+    private long tiempo; // Nuevo campo
 
     public SolveResults(List<Cell> visitadas, List<Cell> camino) {
         this.visitadas = visitadas;
@@ -16,7 +14,7 @@ public class SolveResults {
 
     public List<Cell> getVisitadas() {
         return visitadas;
-    }   
+    }
 
     public List<Cell> getCamino() {
         return camino;
@@ -29,5 +27,13 @@ public class SolveResults {
     public int getLongitudCamino() {
         return camino.size();
     }
-}
 
+    // Nuevo getter y setter para tiempo
+    public long getTiempo() {
+        return tiempo;
+    }
+
+    public void setTiempo(long tiempo) {
+        this.tiempo = tiempo;
+    }
+}

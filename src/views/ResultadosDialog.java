@@ -49,15 +49,29 @@ public class ResultadosDialog extends JDialog {
     }
 
     private void loadData() {
-        results = resultDAO.findAll();
-        for (AlgorithmResult result : results) {
-            model.addRow(new Object[]{
-                    result.getAlgorithmName(),
-                    result.getPathLength(),
-                    result.getTimeMs()
-            });
+        List<AlgorithmResult> nuevosResultados = resultDAO.findAll();
+
+        for (AlgorithmResult result : nuevosResultados) {
+            boolean yaExiste = false;
+            for (int i = 0; i < model.getRowCount(); i++) {
+                if (model.getValueAt(i, 0).equals(result.getAlgorithmName())) {
+                    yaExiste = true;
+                    break;
+                }
+            }
+
+            if (!yaExiste) {
+                model.addRow(new Object[]{
+                        result.getAlgorithmName(),
+                        result.getPathLength(),
+                        result.getTimeMs()
+                });
+            }
         }
+
+        this.results = nuevosResultados; // actualiza la lista interna solo con los más recientes
     }
+
 
     private void mostrarGrafica() {
         if (results.isEmpty()) {
