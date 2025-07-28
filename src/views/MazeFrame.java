@@ -229,8 +229,30 @@ public class MazeFrame extends JFrame {
 
 
     private void reiniciarLaberinto() {
+        String filasStr = JOptionPane.showInputDialog(this, "Ingrese el número de filas:");
+        if (filasStr == null) return; // Usuario canceló
 
+        String columnasStr = JOptionPane.showInputDialog(this, "Ingrese el número de columnas:");
+        if (columnasStr == null) return; // Usuario canceló
+
+        try {
+            int filas = Integer.parseInt(filasStr.trim());
+            int columnas = Integer.parseInt(columnasStr.trim());
+
+            if (filas <= 4 || columnas <= 4) {
+                JOptionPane.showMessageDialog(this, "Debe ingresar valores mayores a 4.");
+                return;
+            }
+
+            dispose();
+
+            SwingUtilities.invokeLater(() -> new MazeFrame(filas, columnas));
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Debe ingresar números válidos.");
+        }
     }
+
 
     private void limpiarPasoAPaso() {
         pasoCeldasVisitadas = null;
