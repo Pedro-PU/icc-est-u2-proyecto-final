@@ -19,6 +19,9 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -187,8 +190,43 @@ public class MazeFrame extends JFrame {
     }
 
     private void mostrarAcercaDe() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
+        JLabel autorLabel = new JLabel("Desarrollado por: Pablo Torres");
+        autorLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        panel.add(autorLabel);
+        panel.add(Box.createVerticalStrut(10));
+
+        JPanel githubPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        try {
+            ImageIcon icono = new ImageIcon(getClass().getResource("/resources/github-original-wordmark.png"));
+            Image img = icono.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+            JLabel iconoLabel = new JLabel(new ImageIcon(img));
+            githubPanel.add(iconoLabel);
+        } catch (Exception e) {
+            System.out.println("No se pudo cargar el logo de GitHub.");
+        }
+
+        JLabel link = new JLabel("<html><a href=''>pablotorresdev</a></html>");
+        link.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        link.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    Desktop.getDesktop().browse(new URI("https://github.com/Pablot18"));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        githubPanel.add(link);
+        githubPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        panel.add(githubPanel);
+
+        JOptionPane.showMessageDialog(this, panel, "Acerca de", JOptionPane.INFORMATION_MESSAGE);
     }
+
 
     private void reiniciarLaberinto() {
 
