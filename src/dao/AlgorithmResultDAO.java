@@ -1,5 +1,6 @@
 package dao;
 
-public class AlgorithmResultDAO {
+
+public interface AlgorithmResultDAO {
     
 }
