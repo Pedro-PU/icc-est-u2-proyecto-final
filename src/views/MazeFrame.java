@@ -4,9 +4,16 @@ import controllers.MazeController;
 import dao.AlgorithmResultDAO;
 import dao.daoImpl.AlgorithmResultDAOFile;
 import enums.Modo;
+import models.AlgorithmResult;
 import models.Cell;
 import models.CellState;
 import models.SolveResults;
+import solver.MazeSolver;
+import solver.solverImpl.MazeSolverBFS;
+import solver.solverImpl.MazeSolverDFS;
+import solver.solverImpl.MazeSolverRecursivo;
+import solver.solverImpl.MazeSolverRecursivoCompleto;
+import solver.solverImpl.MazeSolverRecursivoCompletoBT;
 
 import java.awt.*;
 import javax.swing.*;
@@ -197,7 +204,54 @@ public class MazeFrame extends JFrame {
     }
 
     private SolveResults resolverYObtenerResultados() {
+        MazeSolver solver;
+        Cell inicio = controller.getStartCell();
+        Cell fin = controller.getEndCell();
+
+    if (inicio == null || fin == null) {
+        JOptionPane.showMessageDialog(this, "Debe establecer origen y destino.");
         return null;
+    }
+
+    mazePanel.limpiarCeldasVisitadas();
+    limpiarPasoAPaso();
+
+    String algoritmo = (String) algorithmSelector.getSelectedItem();
+
+    // Elegir el algoritmo
+    switch (algoritmo) {
+        case "Recursivo":
+            solver = new MazeSolverRecursivo();
+            break;
+        case "Recursivo Completo":
+            solver = new MazeSolverRecursivoCompleto();
+            break;
+        case "Recursivo Completo BT":
+            solver = new MazeSolverRecursivoCompletoBT();
+            break;
+        case "DFS":
+            solver = new MazeSolverDFS();
+            break;
+        case "BFS":
+            solver = new MazeSolverBFS();
+            break;
+        default:
+            solver = new MazeSolverRecursivo(); // por defecto
+            break;
+    }
+
+    long tiempoInicio = System.nanoTime();
+    SolveResults resultado = solver.getPath(mazePanel.getCells(), inicio, fin);
+    long tiempoFin = System.nanoTime();
+
+
+    if (resultado != null && !resultado.getCamino().isEmpty()) {
+        AlgorithmResult info = new AlgorithmResult(algoritmo, resultado.getCamino().size(), tiempoFin - tiempoInicio);
+        resultDAO.save(info);
+    }
+
+    return resultado;
+
     }
 
 }

@@ -16,7 +16,7 @@ public class SolveResults {
 
     public List<Cell> getVisitadas() {
         return visitadas;
-    }
+    }   
 
     public List<Cell> getCamino() {
         return camino;
