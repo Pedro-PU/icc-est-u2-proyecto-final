@@ -1,71 +1,60 @@
 package solver.solverImpl;
+
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+
 import models.Cell;
 import models.CellState;
 import models.SolveResults;
 import solver.MazeSolver;
 
-import java.util.*;
-
 public class MazeSolverDFS implements MazeSolver {
-    @Override
-    public SolveResults getPath(Cell[][] maze, Cell start, Cell end) {
-        int rows = maze.length;
-        int cols = maze[0].length;
+  private Set<Cell> visitadas = new LinkedHashSet<>();
+  private List<Cell> camino = new ArrayList<>();
 
-        Set<Cell> visited = new HashSet<>();
-        List<Cell> camino = new ArrayList<>();
-        Map<Cell, Cell> cameFrom = new HashMap<>();
-
-        dfs(start, end, maze, visited, cameFrom);
-
-        // Reconstruir camino
-        Cell step = end;
-        while (step != null && cameFrom.containsKey(step)) {
-            camino.add(0, step);
-            step = cameFrom.get(step);
-        }
-
-        if (step == start) {
-            camino.add(0, start);
-        }
-
-        return new SolveResults(new ArrayList<>(visited), camino);
+  @Override
+  public SolveResults getPath(Cell[][] maze, Cell start, Cell end) {
+    visitadas.clear();
+    camino.clear();
+    boolean encontrado = dfs(maze, start.getRow(), start.getCol(), end);
+    if (encontrado) {
+      // El camino se llenó de forma inversa, entonces invertimos
+      List<Cell> caminoOrdenado = new ArrayList<>();
+      for (int i = camino.size() - 1; i >= 0; i--) {
+        caminoOrdenado.add(camino.get(i));
+      }
+      return new SolveResults(new ArrayList<>(visitadas), caminoOrdenado);
+    } else {
+      // No se encontró camino, retornar camino vacío
+      return new SolveResults(new ArrayList<>(visitadas), new ArrayList<>());
     }
+  }
 
-    private boolean dfs(Cell current, Cell end, Cell[][] maze, Set<Cell> visited, Map<Cell, Cell> cameFrom) {
-        if (visited.contains(current) || current.getState() == CellState.WALL) return false;
-
-        visited.add(current);
-
-        if (current.equals(end)) return true;
-
-        for (Cell neighbor : getNeighbors(current, maze)) {
-            if (!visited.contains(neighbor)) {
-                cameFrom.put(neighbor, current);
-                if (dfs(neighbor, end, maze, visited, cameFrom)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+  private boolean dfs(Cell[][] maze, int row, int col, Cell end) {
+    if (!isValid(maze, row, col)) return false;
+    Cell cell = maze[row][col];
+    if (visitadas.contains(cell)) return false;
+    visitadas.add(cell);
+    if (cell.equals(end)) {
+      camino.add(cell);
+      return true;
     }
-
-    private List<Cell> getNeighbors(Cell cell, Cell[][] maze) {
-        List<Cell> neighbors = new ArrayList<>();
-        int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}; // Arriba, Abajo, Izquierda, Derecha
-        int r = cell.getRow();
-        int c = cell.getCol();
-
-        for (int[] dir : dirs) {
-            int nr = r + dir[0];
-            int nc = c + dir[1];
-
-            if (nr >= 0 && nr < maze.length && nc >= 0 && nc < maze[0].length) {
-                neighbors.add(maze[nr][nc]);
-            }
-        }
-
-        return neighbors;
+    // Explorar vecinos: abajo, arriba, derecha, izquierda
+    if (dfs(maze, row + 1, col, end) ||
+        dfs(maze, row - 1, col, end) ||
+        dfs(maze, row, col + 1, end) ||
+        dfs(maze, row, col - 1, end)) {
+      camino.add(cell);
+      return true;
     }
+    return false;
+  }
+
+  private boolean isValid(Cell[][] maze, int row, int col) {
+    return (row >= 0 && row < maze.length &&
+            col >= 0 && col < maze[0].length &&
+            maze[row][col].getState() != CellState.WALL);
+  }
 }
