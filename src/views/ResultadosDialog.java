@@ -2,7 +2,6 @@ package views;
 
 import dao.AlgorithmResultDAO;
 import models.AlgorithmResult;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
