@@ -208,36 +208,72 @@ public class MazeFrame extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-        JLabel autorLabel = new JLabel("Desarrollado por: Pablo Torres");
+        JLabel autorLabel = new JLabel("<html>Desarrollado por:<br>" +
+                "Pedro Pesántez,<br>" +
+                "Jonnathan Saavedra,<br>" +
+                "Fernando Martínez,<br>" +
+                "Mathias Añazco</html>");
         autorLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         panel.add(autorLabel);
         panel.add(Box.createVerticalStrut(10));
 
-        JPanel githubPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        try {
-            ImageIcon icono = new ImageIcon(getClass().getResource("/resources/github-original-wordmark.png"));
-            Image img = icono.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-            JLabel iconoLabel = new JLabel(new ImageIcon(img));
-            githubPanel.add(iconoLabel);
-        } catch (Exception e) {
-            System.out.println("No se pudo cargar el logo de GitHub.");
-        }
+        JPanel autoresPanel = new JPanel();
+        autoresPanel.setLayout(new BoxLayout(autoresPanel, BoxLayout.Y_AXIS));
 
-        JLabel link = new JLabel("<html><a href=''>pablotorresdev</a></html>");
-        link.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        link.addMouseListener(new MouseAdapter() {
+        JLabel link1 = new JLabel("<html><a href=''>Pedro-PU</a></html>");
+        JLabel link2 = new JLabel("<html><a href=''>jonnathans06</a></html>");
+        JLabel link3 = new JLabel("<html><a href=''>MHFERNANDO</a></html>");
+        JLabel link4 = new JLabel("<html><a href=''>Mathias-Anazco</a></html>");
+        link1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        link1.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 try {
-                    Desktop.getDesktop().browse(new URI("https://github.com/Pablot18"));
+                    Desktop.getDesktop().browse(new URI("https://github.com/Pedro-PU"));
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
         });
-        githubPanel.add(link);
-        githubPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        autoresPanel.add(link1);
 
-        panel.add(githubPanel);
+        link2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        link2.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    Desktop.getDesktop().browse(new URI("https://github.com/jonnathans06"));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        autoresPanel.add(link2);
+
+        link3.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        link3.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    Desktop.getDesktop().browse(new URI("https://github.com/MHFERNANDO"));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        autoresPanel.add(link3);
+
+        link4.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        link4.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    Desktop.getDesktop().browse(new URI("https://github.com/Mathias-Anazco?tab=repositories"));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        autoresPanel.add(link4);
+        autoresPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        panel.add(autoresPanel);
 
         JOptionPane.showMessageDialog(this, panel, "Acerca de", JOptionPane.INFORMATION_MESSAGE);
     }
