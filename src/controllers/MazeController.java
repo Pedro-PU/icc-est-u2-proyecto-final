@@ -1,22 +1,31 @@
 package controllers;
 
 import enums.Modo;
+import models.Cell;
+import views.MazePanel;
 
 import static enums.Modo.*;
 
 public class MazeController {
 
-    private Modo currentMode = WALL;
+    private Modo currentMode = Modo.WALL;
 
-    /*
-    Los métodos del método de abajo que están comentados por favor revisen
-    ⬇️⬇️
+    private Cell startCell;
 
-    En el controller del profe esta creando un enum, yo lo que hice fue crear un package, enum y una
-    clase enum llamada Modo si es que tiene que usar algún enum como el del profe revisen bien y coloquen
-    de nuestra clase Modo
+    private Cell endCell;
 
-    */
+    private final MazePanel panel;
+
+
+    public MazeController(MazePanel paramMazePanel) {
+        this.panel = paramMazePanel;
+        paramMazePanel.setController(this);
+    }
+
+    public void setModo(Modo paramMode){
+        this.currentMode = paramMode;
+    }
+
 
     public void celdaClickeada(int parametro1, int parametro2) {
         switch (this.currentMode) {
@@ -31,5 +40,5 @@ public class MazeController {
                 break;
         }
     }
-    
+
 }
