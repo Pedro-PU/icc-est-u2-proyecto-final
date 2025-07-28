@@ -195,7 +195,10 @@ public class MazeFrame extends JFrame {
     }
 
     private void limpiarPasoAPaso() {
-
+        pasoCeldasVisitadas = null;
+        pasoCamino = null;
+        pasoIndex = 0;
+        resolvioPasoAPaso = false;
     }
 
     private void animarVisitadas(List<Cell> visitadas, List<Cell> camino) {
