@@ -1,7 +1,7 @@
 package models;
 
 public class AlgorithmResult {
-    private final String algorithmName;
+  private final String algorithmName;
   
   private final int pathLength;
   
@@ -24,8 +24,10 @@ public class AlgorithmResult {
   public long getTimeMs() {
     return this.timeMs;
   }
-  
+
+  @Override
   public String toString() {
-    return this.algorithmName + "," + this.algorithmName + "," + this.pathLength;
+    return this.algorithmName + "," + this.pathLength + "," + this.timeMs;
   }
+
 }

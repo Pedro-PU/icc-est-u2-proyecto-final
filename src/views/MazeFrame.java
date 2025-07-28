@@ -92,7 +92,7 @@ public class MazeFrame extends JFrame {
         add(jPanel1, BorderLayout.NORTH);
 
         String[] algoritmos = {
-                "Recursivo", "Recursivo Completo", "Recursivo Completo BT", "BFS", "DFS", "Backtracking"
+                "Recursivo", "Recursivo Completo", "Recursivo Completo BT", "BFS", "DFS"
         };
         this.algorithmSelector = new JComboBox<>(algoritmos);
         this.solveButton = new JButton("Resolver");
@@ -262,14 +262,14 @@ public class MazeFrame extends JFrame {
     }
 
     private void animarVisitadas(List<Cell> visitadas, List<Cell> camino) {
-        // Pintar las celdas visitadas 
+        // Pintar las celdas visitadas
     for (Cell cell : visitadas) {
         if (cell.getState() == CellState.EMPTY) {
             paintCell(cell, CellState.EMPTY);
         }
     }
 
-    // Pintar el camino final 
+    // Pintar el camino final
     for (Cell cell : camino) {
         if (cell.getState() != CellState.START && cell.getState() != CellState.END) {
             paintCell(cell, CellState.PATH);
@@ -283,7 +283,7 @@ public class MazeFrame extends JFrame {
         boton.setBackground(color);
     }
 
-    
+
 
 
     private SolveResults resolverYObtenerResultados() {
