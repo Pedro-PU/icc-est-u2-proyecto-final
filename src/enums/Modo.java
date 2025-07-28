@@ -4,4 +4,5 @@ public enum Modo {
     START,
     END,
     WALL;
+
 }
