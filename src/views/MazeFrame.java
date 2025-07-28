@@ -1,5 +1,8 @@
 package views;
 
-public class MazeFrame {
-    
+
+import javax.swing.*;
+
+public class MazeFrame extends JFrame {
+
 }
