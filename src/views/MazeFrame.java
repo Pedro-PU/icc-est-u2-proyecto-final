@@ -186,6 +186,13 @@ public class MazeFrame extends JFrame {
         jMenuBar.add(jMenu2);
 
         setJMenuBar(jMenuBar);
+        // Asignación de colores a cada estado
+        COLOR_MAP.put(CellState.EMPTY, new Color(88, 92, 94)); // Celeste claro para visitadas
+        COLOR_MAP.put(CellState.PATH, new Color(111, 230, 215));     // Dorado para el camino
+        COLOR_MAP.put(CellState.START, Color.GREEN);              // Ya pintado al seleccionar
+        COLOR_MAP.put(CellState.END, Color.RED);
+        COLOR_MAP.put(CellState.WALL, Color.BLACK);
+
         setVisible(true);
     }
 
@@ -262,22 +269,48 @@ public class MazeFrame extends JFrame {
     }
 
     private void animarVisitadas(List<Cell> visitadas, List<Cell> camino) {
-        // Pintar las celdas visitadas
-    for (Cell cell : visitadas) {
-        if (cell.getState() == CellState.EMPTY) {
-            paintCell(cell, CellState.EMPTY);
-        }
+        new SwingWorker<Void, Cell>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                // Primero animar las celdas visitadas
+                for (Cell cell : visitadas) {
+                    if (cell.getState() == CellState.EMPTY) {
+                        cell.setState(CellState.EMPTY); // aseguramos estado
+                        publish(cell);
+                        Thread.sleep(40);
+                    }
+                }
+
+                // Luego animar el camino real
+                for (Cell cell : camino) {
+                    if (cell.getState() != CellState.START && cell.getState() != CellState.END) {
+                        cell.setState(CellState.PATH); // marcamos como camino
+                        publish(cell);
+                        Thread.sleep(60);
+                    }
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void process(List<Cell> chunks) {
+                for (Cell cell : chunks) {
+                    paintCell(cell, cell.getState());
+                }
+            }
+
+            @Override
+            protected void done() {
+                // Opcional: mensaje al terminar
+            }
+        }.execute();
     }
 
-    // Pintar el camino final
-    for (Cell cell : camino) {
-        if (cell.getState() != CellState.START && cell.getState() != CellState.END) {
-            paintCell(cell, CellState.PATH);
-        }
-    }
-    }
+
 
     private void paintCell(Cell cell, CellState cellState) {
+        cell.setState(cellState);
         JButton boton = mazePanel.getButton(cell.getRow(), cell.getCol());
         Color color = COLOR_MAP.getOrDefault(cellState, Color.WHITE);
         boton.setBackground(color);

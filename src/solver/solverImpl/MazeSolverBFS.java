@@ -8,6 +8,7 @@ import solver.MazeSolver;
 import java.util.*;
 
 public class MazeSolverBFS implements MazeSolver {
+
     @Override
     public SolveResults getPath(Cell[][] maze, Cell start, Cell end) {
         int rows = maze.length;
@@ -35,16 +36,18 @@ public class MazeSolverBFS implements MazeSolver {
             }
         }
 
-        // Reconstruir el camino
-        Cell step = end;
-        while (step != null && cameFrom.containsKey(step)) {
-            camino.add(0, step);
-            step = cameFrom.get(step);
+        // Verificar si se encontró camino
+        if (!cameFrom.containsKey(end)) {
+            return new SolveResults(new ArrayList<>(visited), camino); // camino vacío
         }
 
-        if (step == start) {
-            camino.add(0, start);
+        // Reconstruir camino desde end hasta start
+        Cell current = end;
+        while (!current.equals(start)) {
+            camino.add(0, current);
+            current = cameFrom.get(current);
         }
+        camino.add(0, start); // incluir el nodo de inicio
 
         return new SolveResults(new ArrayList<>(visited), camino);
     }
