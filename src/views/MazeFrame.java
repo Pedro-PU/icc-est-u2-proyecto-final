@@ -187,6 +187,7 @@ public class MazeFrame extends JFrame {
     }
 
     private void mostrarAcercaDe() {
+
     }
 
     private void reiniciarLaberinto() {
@@ -194,14 +195,21 @@ public class MazeFrame extends JFrame {
     }
 
     private void limpiarPasoAPaso() {
+
     }
 
     private void animarVisitadas(List<Cell> visitadas, List<Cell> camino) {
-
+        
     }
 
     private void paintCell(Cell cell, CellState cellState) {
+        JButton boton = mazePanel.getButton(cell.getRow(), cell.getCol());
+        Color color = COLOR_MAP.getOrDefault(cellState, Color.WHITE);
+        boton.setBackground(color);
     }
+
+    
+
 
     private SolveResults resolverYObtenerResultados() {
         MazeSolver solver;
