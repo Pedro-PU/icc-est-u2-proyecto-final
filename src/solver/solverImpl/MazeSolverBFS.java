@@ -15,12 +15,14 @@ public class MazeSolverBFS implements MazeSolver {
         int cols = maze[0].length;
 
         Map<Cell, Cell> cameFrom = new HashMap<>();
-        Set<Cell> visited = new HashSet<>();
+        Set<Cell> visitedSet = new HashSet<>();
         Queue<Cell> queue = new LinkedList<>();
+        List<Cell> visitadas = new ArrayList<>();
         List<Cell> camino = new ArrayList<>();
 
         queue.add(start);
-        visited.add(start);
+        visitedSet.add(start);
+        visitadas.add(start);
 
         while (!queue.isEmpty()) {
             Cell current = queue.poll();
@@ -28,33 +30,33 @@ public class MazeSolverBFS implements MazeSolver {
             if (current.equals(end)) break;
 
             for (Cell neighbor : getNeighbors(current, maze)) {
-                if (!visited.contains(neighbor) && neighbor.getState() != CellState.WALL) {
+                if (!visitedSet.contains(neighbor) && neighbor.getState() != CellState.WALL) {
                     queue.add(neighbor);
-                    visited.add(neighbor);
+                    visitedSet.add(neighbor);
+                    visitadas.add(neighbor);
                     cameFrom.put(neighbor, current);
                 }
             }
         }
 
-        // Verificar si se encontró camino
+        // Reconstrucción del camino si se encontró
         if (!cameFrom.containsKey(end)) {
-            return new SolveResults(new ArrayList<>(visited), camino); // camino vacío
+            return new SolveResults(visitadas, camino); // Camino vacío
         }
 
-        // Reconstruir camino desde end hasta start
         Cell current = end;
         while (!current.equals(start)) {
             camino.add(0, current);
             current = cameFrom.get(current);
         }
-        camino.add(0, start); // incluir el nodo de inicio
+        camino.add(0, start);
 
-        return new SolveResults(new ArrayList<>(visited), camino);
+        return new SolveResults(visitadas, camino);
     }
 
     private List<Cell> getNeighbors(Cell cell, Cell[][] maze) {
         List<Cell> neighbors = new ArrayList<>();
-        int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}; // Arriba, Abajo, Izquierda, Derecha
+        int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
         int r = cell.getRow();
         int c = cell.getCol();
 
