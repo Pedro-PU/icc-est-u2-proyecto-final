@@ -109,8 +109,16 @@ public class MazeFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 SolveResults solveResults = resolverYObtenerResultados();
                 if (solveResults != null) {
+                    AlgorithmResult info = new AlgorithmResult(
+                            (String) algorithmSelector.getSelectedItem(),
+                            solveResults.getLongitudCamino(),
+                            solveResults.getTiempo()
+                    );
+                    resultDAO.save(info); // Guardamos aquí y solo aquí
+
                     animarVisitadas(solveResults.getVisitadas(), solveResults.getCamino());
                 }
+
             }
         });
 
@@ -361,12 +369,11 @@ public class MazeFrame extends JFrame {
     long tiempoFin = System.nanoTime();
 
 
-    if (resultado != null && !resultado.getCamino().isEmpty()) {
-        AlgorithmResult info = new AlgorithmResult(algoritmo, resultado.getCamino().size(), tiempoFin - tiempoInicio);
-        resultDAO.save(info);
-    }
-
-    return resultado;
+        if (resultado != null && !resultado.getCamino().isEmpty()) {
+            resultado.setTiempo(tiempoFin - tiempoInicio); // Guardamos tiempo, pero no escribimos archivo
+            return resultado;
+        }
+        return null;
 
     }
 

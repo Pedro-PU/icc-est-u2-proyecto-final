@@ -22,7 +22,7 @@ public class AlgorithmResultDAOFile implements AlgorithmResultDAO {
 
         for (int i = 0; i < resultados.size(); i++) {
             if (resultados.get(i).getAlgorithmName().equalsIgnoreCase(resultado.getAlgorithmName())) {
-                resultados.set(i, resultado); // reemplazar
+                resultados.set(i, resultado);
                 existe = true;
                 break;
             }
