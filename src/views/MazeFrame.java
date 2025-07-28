@@ -199,7 +199,19 @@ public class MazeFrame extends JFrame {
     }
 
     private void animarVisitadas(List<Cell> visitadas, List<Cell> camino) {
-        
+        // Pintar las celdas visitadas 
+    for (Cell cell : visitadas) {
+        if (cell.getState() == CellState.EMPTY) {
+            paintCell(cell, CellState.EMPTY);
+        }
+    }
+
+    // Pintar el camino final 
+    for (Cell cell : camino) {
+        if (cell.getState() != CellState.START && cell.getState() != CellState.END) {
+            paintCell(cell, CellState.PATH);
+        }
+    }
     }
 
     private void paintCell(Cell cell, CellState cellState) {
