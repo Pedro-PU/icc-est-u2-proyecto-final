@@ -22,6 +22,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URI;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +53,7 @@ public class MazeFrame extends JFrame {
 
     public MazeFrame(int paramInt1, int paramInt2) {
         this.resultDAO = new AlgorithmResultDAOFile("results.csv");
-        setTitle("Maze Creator");
+        setTitle("Proyecto Final: Laberinto - Algoritmos de recorrido de grafos");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
         setLayout(new BorderLayout());
@@ -66,6 +67,9 @@ public class MazeFrame extends JFrame {
         JButton jButton1 = new JButton("Set Start");
         JButton jButton2 = new JButton("Set End");
         JButton jButton3 = new JButton("Toggle Wall");
+        setIcono(jButton1, "resources/agregar.png");
+        setIcono(jButton2, "resources/anadir.png");
+        setIcono(jButton3, "resources/salida.png");
         aplicarEstiloBoton(jButton1);
         aplicarEstiloBoton(jButton2);
         aplicarEstiloBoton(jButton3);
@@ -219,6 +223,7 @@ public class MazeFrame extends JFrame {
         COLOR_MAP.put(CellState.WALL, Color.BLACK);
 
         setVisible(true);
+        inicializarImagenes();
     }
 
     private void mostrarAcercaDe() {
@@ -321,7 +326,6 @@ public class MazeFrame extends JFrame {
         }
     }
 
-
     private void limpiarPasoAPaso() {
         pasoCeldasVisitadas = null;
         pasoCamino = null;
@@ -371,18 +375,12 @@ public class MazeFrame extends JFrame {
         timerCamino.start();
     }
 
-
-
-
     private void paintCell(Cell cell, CellState cellState) {
         cell.setState(cellState);
         JButton boton = mazePanel.getButton(cell.getRow(), cell.getCol());
         Color color = COLOR_MAP.getOrDefault(cellState, Color.WHITE);
         boton.setBackground(color);
     }
-
-
-
 
     private SolveResults resolverYObtenerResultados() {
         MazeSolver solver;
@@ -444,5 +442,25 @@ public class MazeFrame extends JFrame {
         ));
     }
 
+    private void inicializarImagenes() {
+        setIcono(solveButton, "resources/editar.png");
+        setIcono(pasoAPasoButton, "resources/detalles.png");
 
+        // Busca el botón "Limpiar" en el panel sur
+        Component[] componentesSur = ((JPanel)getContentPane().getComponent(2)).getComponents();
+        for (Component comp : componentesSur) {
+            if (comp instanceof JButton && ((JButton) comp).getText().equals("Limpiar")) {
+                setIcono((JButton) comp, "resources/limpiar.png");
+            }
+        }
+    }
+
+    private void setIcono(AbstractButton boton, String rutaImagen) {
+        URL url = getClass().getClassLoader().getResource(rutaImagen);
+        if (url != null) {
+            boton.setIcon(new ImageIcon(url));
+        } else {
+            System.err.println("No se encontró la imagen: " + rutaImagen);
+        }
+    }
 }

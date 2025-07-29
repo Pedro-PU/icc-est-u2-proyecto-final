@@ -36,6 +36,21 @@ public class ResultadosDialog extends JDialog {
 
         JButton clearButton = new JButton("Limpiar Resultados");
         JButton graphButton = new JButton("Graficar Resultados");
+        Font buttonFont = new Font("SansSerif", Font.BOLD, 13);
+        Color backgroundColor = new Color(213, 213, 213); // Azul suave
+        Color foregroundColor = Color.WHITE;
+
+        for (JButton btn : new JButton[]{clearButton, graphButton}) {
+            btn.setFont(buttonFont);
+            btn.setBackground(backgroundColor);
+            btn.setForeground(foregroundColor);
+            btn.setFocusPainted(false);
+            btn.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(new Color(78, 78, 78), 1),
+                    new EmptyBorder(5, 12, 5, 12)
+            ));
+            btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        }
 
         clearButton.setFocusPainted(false);
         graphButton.setFocusPainted(false);
