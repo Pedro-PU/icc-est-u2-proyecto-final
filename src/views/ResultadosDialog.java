@@ -3,6 +3,7 @@ package views;
 import dao.AlgorithmResultDAO;
 import models.AlgorithmResult;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -18,17 +19,41 @@ public class ResultadosDialog extends JDialog {
         this.resultDAO = resultDAO;
 
         setLayout(new BorderLayout());
+        ((JComponent) getContentPane()).setBorder(new EmptyBorder(10, 10, 10, 10));
 
         model = new DefaultTableModel(new Object[]{"Algoritmo", "Celdas Camino", "Tiempo (ns)"}, 0);
         JTable table = new JTable(model);
+        table.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        table.setRowHeight(22);
+        table.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 14));
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
 
         loadData();
 
-        JPanel buttonPanel = new JPanel();
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonPanel.setBorder(new EmptyBorder(5, 0, 0, 0));
+
         JButton clearButton = new JButton("Limpiar Resultados");
         JButton graphButton = new JButton("Graficar Resultados");
+        Font buttonFont = new Font("SansSerif", Font.BOLD, 13);
+        Color backgroundColor = new Color(213, 213, 213); // Azul suave
+        Color foregroundColor = Color.WHITE;
+
+        for (JButton btn : new JButton[]{clearButton, graphButton}) {
+            btn.setFont(buttonFont);
+            btn.setBackground(backgroundColor);
+            btn.setForeground(foregroundColor);
+            btn.setFocusPainted(false);
+            btn.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(new Color(78, 78, 78), 1),
+                    new EmptyBorder(5, 12, 5, 12)
+            ));
+            btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        }
+
+        clearButton.setFocusPainted(false);
+        graphButton.setFocusPainted(false);
 
         clearButton.addActionListener((ActionEvent e) -> {
             int i = JOptionPane.showConfirmDialog(this, "¿Deseas borrar todos los resultados?", "Confirmar", JOptionPane.YES_NO_OPTION);
@@ -44,7 +69,7 @@ public class ResultadosDialog extends JDialog {
         buttonPanel.add(graphButton);
         add(buttonPanel, BorderLayout.SOUTH);
 
-        setSize(500, 400);
+        setSize(550, 420);
         setLocationRelativeTo(parent);
     }
 
@@ -106,7 +131,7 @@ public class ResultadosDialog extends JDialog {
             }
         };
 
-        graficoPanel.setPreferredSize(new Dimension(600, 400));
+        graficoPanel.setPreferredSize(new Dimension(650, 450));
 
         JDialog graficoDialog = new JDialog(this, "Gráfico de Tiempos", true);
         graficoDialog.getContentPane().add(graficoPanel);
