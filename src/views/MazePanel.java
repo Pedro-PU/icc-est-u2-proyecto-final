@@ -10,66 +10,83 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MazePanel extends JPanel {
-    private final int rows;
-    private final int cols;
-    private final Cell[][] cells;
-    private final JButton[][] buttons;
-    private MazeController mazeController;
+    private final int filas;
+    private final int columnas;
+    private final Cell[][] celdas;
+    private final JButton[][] botones;
+    private MazeController controlador;
 
-    public MazePanel(int parametro1, int parametro2) {
-        this.rows = parametro1;
-        this.cols = parametro2;
-        this.cells = new Cell[rows][cols];
-        this.buttons = new JButton[parametro1][parametro2];
-        setLayout(new GridLayout(parametro1, parametro2));
-        cargarMatriz();
+    public MazePanel(int filas, int columnas) {
+        this.filas = filas;
+        this.columnas = columnas;
+        this.celdas = new Cell[filas][columnas];
+        this.botones = new JButton[filas][columnas];
+
+        setLayout(new GridLayout(filas, columnas, 1, 1)); // Espacio entre botones
+        setBackground(Color.DARK_GRAY);
+        inicializarMatriz();
     }
 
-    public void setController(MazeController controllerMaze) {
-        this.mazeController = controllerMaze;
+    public void setController(MazeController controlador) {
+        this.controlador = controlador;
     }
 
-    public void cargarMatriz() {
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                Cell cell = new Cell(i, j);
-                JButton jButton = new JButton();
-                jButton.setBackground(Color.WHITE);
-                jButton.setOpaque(true);
-                jButton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-                int i2 = i, j2 = j;
-                jButton.addActionListener(new ActionListener() {
+    private void inicializarMatriz() {
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < columnas; j++) {
+                Cell celda = new Cell(i, j);
+                JButton boton = new JButton();
+
+                // Estilo visual personalizado
+                boton.setBackground(Color.WHITE);
+                boton.setOpaque(true);
+                boton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+                boton.setFocusPainted(false);
+                boton.setFont(new Font("Verdana", Font.BOLD, 9));
+                boton.setForeground(Color.DARK_GRAY);
+
+                // Redondear esquinas usando UIManager
+                boton.setUI(new javax.swing.plaf.basic.BasicButtonUI());
+
+                final int fila = i;
+                final int col = j;
+
+                boton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        if (MazePanel.this.mazeController != null) {
-                            MazePanel.this.mazeController.celdaClickeada(i2, j2);
+                        if (controlador != null) {
+                            controlador.celdaClickeada(fila, col);
                         }
                     }
                 });
-                add(jButton);
-                this.cells[i2][j2] = cell;
-                this.buttons[i2][j2] = jButton;
+
+                add(boton);
+                celdas[i][j] = celda;
+                botones[i][j] = boton;
             }
         }
     }
 
     public void limpiarCeldasVisitadas() {
-        for (int i = 0; i < this.rows; i++) {
-            for (int j = 0; j < this.cols; j++) {
-                Cell cell = this.cells[i][j];
-                if (cell.getState() != CellState.WALL && cell.getState() != CellState.START && cell.getState() != CellState.END) {
-                    cell.setState(CellState.EMPTY);
-                    this.buttons[i][j].setBackground(Color.WHITE);
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < columnas; j++) {
+                Cell celda = celdas[i][j];
+                if (celda.getState() != CellState.WALL &&
+                        celda.getState() != CellState.START &&
+                        celda.getState() != CellState.END) {
+
+                    celda.setState(CellState.EMPTY);
+                    botones[i][j].setBackground(Color.WHITE);
                 }
             }
         }
     }
 
     public Cell[][] getCells() {
-        return cells;
+        return celdas;
     }
 
-    public JButton getButton(int paramInt1, int paramInt2) {
-        return this.buttons[paramInt1][paramInt2];
+    public JButton getButton(int fila, int columna) {
+        return botones[fila][columna];
     }
 }

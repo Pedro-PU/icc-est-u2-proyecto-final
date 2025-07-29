@@ -66,6 +66,9 @@ public class MazeFrame extends JFrame {
         JButton jButton1 = new JButton("Set Start");
         JButton jButton2 = new JButton("Set End");
         JButton jButton3 = new JButton("Toggle Wall");
+        aplicarEstiloBoton(jButton1);
+        aplicarEstiloBoton(jButton2);
+        aplicarEstiloBoton(jButton3);
 
         jButton1.addActionListener(new ActionListener() {
             @Override
@@ -86,6 +89,7 @@ public class MazeFrame extends JFrame {
             }
         });
 
+
         jPanel1.add(jButton1);
         jPanel1.add(jButton2);
         jPanel1.add(jButton3);
@@ -96,6 +100,7 @@ public class MazeFrame extends JFrame {
         };
         this.algorithmSelector = new JComboBox<>(algoritmos);
         this.solveButton = new JButton("Resolver");
+        aplicarEstiloBoton(solveButton);
 
         JPanel jPanel2 = new JPanel();
         jPanel2.add(new JLabel("Algoritmo:"));
@@ -103,6 +108,9 @@ public class MazeFrame extends JFrame {
         jPanel2.add(this.solveButton);
         jPanel2.add(this.pasoAPasoButton);
         add(jPanel2, BorderLayout.SOUTH);
+        jPanel1.setBackground(new Color(245, 245, 245));
+        jPanel2.setBackground(new Color(245, 245, 245));
+
 
         this.solveButton.addActionListener(new ActionListener() {
             @Override
@@ -149,8 +157,10 @@ public class MazeFrame extends JFrame {
                 }
             }
         });
+        aplicarEstiloBoton(pasoAPasoButton);
 
         JButton jButton4 = new JButton("Limpiar");
+        aplicarEstiloBoton(jButton4);
         jButton4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -194,6 +204,13 @@ public class MazeFrame extends JFrame {
         jMenuBar.add(jMenu2);
 
         setJMenuBar(jMenuBar);
+        Font menuFont = new Font("Segoe UI", Font.PLAIN, 13);
+        jMenu1.setFont(menuFont);
+        jMenu2.setFont(menuFont);
+        jMenuItem1.setFont(menuFont);
+        jMenuItem2.setFont(menuFont);
+        jMenuItem3.setFont(menuFont);
+
         // Asignación de colores a cada estado
         COLOR_MAP.put(CellState.EMPTY, new Color(88, 92, 94)); // Celeste claro para visitadas
         COLOR_MAP.put(CellState.PATH, new Color(111, 230, 215));     // Dorado para el camino
@@ -313,46 +330,46 @@ public class MazeFrame extends JFrame {
     }
 
     private void animarVisitadas(List<Cell> visitadas, List<Cell> camino) {
-    Timer timerVisitadas = new Timer(40, null);
-    final int[] i = {0};
+        Timer timerVisitadas = new Timer(40, null);
+        final int[] i = {0};
 
-    timerVisitadas.addActionListener(e -> {
-        if (i[0] < visitadas.size()) {
-            Cell cell = visitadas.get(i[0]);
-            if (cell.getState() == CellState.EMPTY) {
-                cell.setState(CellState.EMPTY);
-                paintCell(cell, cell.getState());
+        timerVisitadas.addActionListener(e -> {
+            if (i[0] < visitadas.size()) {
+                Cell cell = visitadas.get(i[0]);
+                if (cell.getState() == CellState.EMPTY) {
+                    cell.setState(CellState.EMPTY);
+                    paintCell(cell, cell.getState());
+                }
+                i[0]++;
+            } else {
+                ((Timer) e.getSource()).stop();
+                animarCamino(camino); // empieza la animación del camino cuando termina
             }
-            i[0]++;
-        } else {
-            ((Timer) e.getSource()).stop();
-            animarCamino(camino); // empieza la animación del camino cuando termina
-        }
-    });
+        });
 
-    timerVisitadas.start();
-}
+        timerVisitadas.start();
+    }
 
-private void animarCamino(List<Cell> camino) {
-    Timer timerCamino = new Timer(60, null);
-    final int[] j = {0};
+    private void animarCamino(List<Cell> camino) {
+        Timer timerCamino = new Timer(60, null);
+        final int[] j = {0};
 
-    timerCamino.addActionListener(e -> {
-        if (j[0] < camino.size()) {
-            Cell cell = camino.get(j[0]);
-            if (cell.getState() != CellState.START && cell.getState() != CellState.END) {
-                cell.setState(CellState.PATH);
-                paintCell(cell, cell.getState());
+        timerCamino.addActionListener(e -> {
+            if (j[0] < camino.size()) {
+                Cell cell = camino.get(j[0]);
+                if (cell.getState() != CellState.START && cell.getState() != CellState.END) {
+                    cell.setState(CellState.PATH);
+                    paintCell(cell, cell.getState());
+                }
+                j[0]++;
+            } else {
+                ((Timer) e.getSource()).stop();
+                // Aquí puedes mostrar un mensaje si quieres
             }
-            j[0]++;
-        } else {
-            ((Timer) e.getSource()).stop();
-            // Aquí puedes mostrar un mensaje si quieres
-        }
-    });
+        });
 
-    timerCamino.start();
-}
+        timerCamino.start();
+    }
 
 
 
@@ -416,5 +433,16 @@ private void animarCamino(List<Cell> camino) {
         return null;
 
     }
+
+    private void aplicarEstiloBoton(JButton boton) {
+        boton.setFocusPainted(false);
+        boton.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        boton.setBackground(new Color(220, 220, 220));
+        boton.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.DARK_GRAY, 1),
+                BorderFactory.createEmptyBorder(5, 10, 5, 10)
+        ));
+    }
+
 
 }
