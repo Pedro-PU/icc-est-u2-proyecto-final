@@ -147,7 +147,7 @@ El desarrollo de esta aplicación de resolución de laberintos permitió compren
 
 ---
 
-## 📄 Créditos
+## ©️ Créditos
 
 Aplicación desarrollada por:
 - Jonnathan Saavedra
