@@ -10,6 +10,8 @@
 
 **Fecha:** 2023-07-28
 
+**Link** https://www.canva.com/design/DAGufvi9lUU/jEquMIfKq3m73Zb-yfjHfg/edit?utm_content=DAGufvi9lUU&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+
 ---
 
 ## 🧩 Descripción del problema
